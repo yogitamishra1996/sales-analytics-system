@@ -24,11 +24,11 @@ sales-analytics-system/
 
 ## 🚀 Key Features
 
-- [cite_start]**Robust Data Cleaning:** Handles non-UTF-8 encodings, removes commas from numeric strings, and filters out invalid records (e.g., negative prices, zero quantities)[cite: 1, 3, 20].
-- [cite_start]**Dynamic Filtering:** Allows users to filter analysis results by region or minimum transaction amount via interactive console prompts.
-- [cite_start]**API Enrichment:** Integrates with the `DummyJSON` API to fetch product brands, categories, and ratings based on transaction IDs[cite: 1, 2].
-- [cite_start]**Comprehensive Analytics:** Calculates total revenue, regional performance, top-selling products, customer purchase patterns, and daily trends[cite: 1].
-- [cite_start]**Professional Reporting:** Generates a structured `.txt` report including 8 distinct business sections with formatted tables[cite: 1, 2].
+- **Robust Data Cleaning:** Handles non-UTF-8 encodings, removes commas from numeric strings, and filters out invalid records (e.g., negative prices, zero quantities).
+- **Dynamic Filtering:** Allows users to filter analysis results by region or minimum transaction amount via interactive console prompts.
+- **API Enrichment:** Integrates with the `DummyJSON` API to fetch product brands, categories, and ratings based on transaction IDs.
+- **Comprehensive Analytics:** Calculates total revenue, regional performance, top-selling products, customer purchase patterns, and daily trends.
+- **Professional Reporting:** Generates a structured `.txt` report including 8 distinct business sections with formatted tables.
 
 ---
 
