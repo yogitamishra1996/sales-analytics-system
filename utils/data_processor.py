@@ -104,3 +104,58 @@ def customer_analysis(transactions):
                                    key=lambda x: x[1]['total_spent'], 
                                    reverse=True))
     return sorted_customers
+
+def daily_sales_trend(transactions):
+    """
+    Analyzes sales trends by date, sorted chronologically.
+    
+    Returns: dictionary sorted by date with revenue, count, and unique customers.
+    """
+    trend_data = {}
+
+    for tx in transactions:
+        date = tx['Date']
+        revenue = tx['Quantity'] * tx['UnitPrice']
+        customer = tx['CustomerID']
+        
+        if date not in trend_data:
+            trend_data[date] = {
+                'revenue': 0.0,
+                'transaction_count': 0,
+                'unique_customers': set()  # Use set for unique count
+            }
+        
+        trend_data[date]['revenue'] += revenue
+        trend_data[date]['transaction_count'] += 1
+        trend_data[date]['unique_customers'].add(customer)
+
+    # Format the metrics and sort by date key
+    sorted_trend = {}
+    for date in sorted(trend_data.keys()):
+        stats = trend_data[date]
+        sorted_trend[date] = {
+            'revenue': round(stats['revenue'], 2),
+            'transaction_count': stats['transaction_count'],
+            'unique_customers': len(stats['unique_customers'])
+        }
+    
+    return sorted_trend
+
+
+def find_peak_sales_day(transactions):
+    """
+    Identifies the date with the highest total revenue.
+    
+    Returns: tuple (date, revenue, transaction_count)
+    """
+    # Reuse the trend function to get daily metrics
+    daily_stats = daily_sales_trend(transactions)
+    
+    if not daily_stats:
+        return None
+
+    # Find the date where revenue is the maximum
+    peak_date = max(daily_stats, key=lambda d: daily_stats[d]['revenue'])
+    peak_info = daily_stats[peak_date]
+    
+    return (peak_date, peak_info['revenue'], peak_info['transaction_count'])
