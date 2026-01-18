@@ -35,7 +35,26 @@ sales-analytics-system/
 ## 🛠️ Installation & Setup
 
 1. **Clone the Repository:**
+
    ```bash
    git clone https://github.com/yogitamishra1996/sales-analytics-system
    cd sales-analytics-system
    ```
+
+2. **Install Dependencies: Ensure you have Python 3.x installed, then run:**
+
+```
+Bash
+
+pip install -r requirements.txt
+```
+
+3. **Prepare Data: Place your sales_data.txt file inside the data/ folder.**
+
+## 💻 Usage
+
+**Run the main application from the root directory:**
+
+```bash
+python main.py
+```
