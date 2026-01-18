@@ -36,3 +36,70 @@ def create_product_mapping(api_products):
             'rating': product.get('rating')
         }
     return mapping
+
+
+import os
+
+def enrich_sales_data(transactions, product_mapping):
+    """
+    Enriches transaction data with API product information.
+    """
+    enriched_list = []
+    
+    for tx in transactions:
+        # Extract numeric ID from ProductID (e.g., P101 -> 101)
+        raw_id = tx.get('ProductID', '')
+        # Remove the 'P' prefix and convert to int
+        numeric_id = None
+        try:
+            numeric_id = int(''.join(filter(str.isdigit, raw_id)))
+        except ValueError:
+            pass
+
+        # Enrich based on mapping
+        if numeric_id in product_mapping:
+            info = product_mapping[numeric_id]
+            tx['API_Category'] = info['category']
+            tx['API_Brand'] = info['brand']
+            tx['API_Rating'] = info['rating']
+            tx['API_Match'] = True
+        else:
+            # Set to None if no match found
+            tx['API_Category'] = None
+            tx['API_Brand'] = None
+            tx['API_Rating'] = None
+            tx['API_Match'] = False
+            
+        enriched_list.append(tx)
+    
+    # Save the data after enrichment
+    save_enriched_data(enriched_list)
+    return enriched_list
+
+def save_enriched_data(enriched_transactions, filename='data/enriched_sales_data.txt'):
+    """
+    Saves enriched transactions back to a pipe-delimited file.
+    """
+    # Ensure directory exists
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    
+    headers = ['TransactionID', 'Date', 'ProductID', 'ProductName', 'Quantity', 
+               'UnitPrice', 'CustomerID', 'Region', 'API_Category', 'API_Brand', 
+               'API_Rating', 'API_Match']
+    
+    try:
+        with open(filename, 'w', encoding='utf-8') as f:
+            # Write Header
+            f.write('|'.join(headers) + '\n')
+            
+            # Write Records
+            for tx in enriched_transactions:
+                row = []
+                for h in headers:
+                    val = tx.get(h, '')
+                    # Handle None values appropriately by converting to empty string or 'None'
+                    row.append(str(val) if val is not None else "None")
+                f.write('|'.join(row) + '\n')
+        print(f"Successfully saved enriched data to {filename}")
+    except Exception as e:
+        print(f"Error saving enriched data: {e}")
